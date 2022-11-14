@@ -53,7 +53,7 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 	export OF_DONT_PATCH_ENCRYPTED_DEVICE=1
 	export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
 	export OF_NO_TREBLE_COMPATIBILITY_CHECK=1
-	export OF_NO_MIUI_PATCH_WARNING=1
+#	export OF_NO_MIUI_PATCH_WARNING=1
 	export FOX_USE_BASH_SHELL=1
 	export FOX_ASH_IS_BASH=1
 	export FOX_USE_TAR_BINARY=1
@@ -69,9 +69,9 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 
     # OTA
     export OF_KEEP_DM_VERITY=1
-    export OF_SUPPORT_ALL_BLOCK_OTA_UPDATES=1
+#    export OF_SUPPORT_ALL_BLOCK_OTA_UPDATES=1
     export OF_FIX_OTA_UPDATE_MANUAL_FLASH_ERROR=1
-    export OF_DISABLE_MIUI_OTA_BY_DEFAULT=1
+#    export OF_DISABLE_MIUI_OTA_BY_DEFAULT=1
 
 	# Screen Settings
 	export OF_SCREEN_H=2400
@@ -84,7 +84,7 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 	
 	# R11.1 Settings
 	export FOX_VERSION="R11.1"
-	export OF_MAINTAINER="Rahul"
+	export OF_MAINTAINER="duanespiritu"
 	export FOX_BUILD_TYPE="Beta"
 
 	# Run a Process after Formatting Data to Work-Around MTP Issues
