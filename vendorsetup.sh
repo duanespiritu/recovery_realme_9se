@@ -17,7 +17,7 @@
 #
 # 	Please maintain this if you use this script or any part of it
 #
-FDEVICE="lisa"
+FDEVICE="RMX3461"
 #set -o xtrace
 
 fox_get_target_device() {
@@ -38,8 +38,8 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
    	export TW_DEFAULT_LANGUAGE="en"
 	export LC_ALL="C"
  	export ALLOW_MISSING_DEPENDENCIES=true
-	export TARGET_DEVICE_ALT="lisa,lisa_in,lisa_cn,lisa_global"
-	export OF_TARGET_DEVICES="lisa_in,lisa_cn,lisa_global"
+	export TARGET_DEVICE_ALT="RMX3461,RMX3461_in,RMX3461_cn,RMX3461_global"
+	export OF_TARGET_DEVICES="RMX3461_in,RMX3461_cn,RMX3461_global"
 	export OF_VIRTUAL_AB_DEVICE=1
 	export OF_AB_DEVICE=1
 	export FOX_RECOVERY_SYSTEM_PARTITION="/dev/block/mapper/system"
