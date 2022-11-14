@@ -24,6 +24,9 @@ on property:twrp.modules.loaded=true
     wait /sys/class/power_supply/battery
     start health-hal-2-1
     setprop sys.usb.config mtp,adb
+    # OTG
+    wait /sys/devices/virtual/oplus_chg/usb/otg_switch    
+    write /sys/devices/virtual/oplus_chg/usb/otg_switch 1 
 
 on property:sys.usb.config=fastboot
    start servicemanager
