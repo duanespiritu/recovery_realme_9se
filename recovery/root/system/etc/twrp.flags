@@ -1,28 +1,63 @@
-# Android fstab file.
-# The filesystem that contains the filesystem checker binary (typically /system) cannot
-# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+# mount point	fstype	device											device2				flags
+# Logical partitions
+system       /system                ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+system       /system                erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+system_ext   /system_ext            ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+system_ext   /system_ext            erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+product      /product               ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+product      /product               erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+vendor       /vendor                ext4    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+vendor       /vendor                erofs    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+odm          /odm                   ext4    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+odm          /odm                   erofs    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
 
-# mount point  fstype  device                             device2                flags
+/system_root            ext4    /system                        flags=slotselect;flashimg=1
+/system_root            erofs   /system                        flags=slotselect;flashimg=1
+/system_image           emmc    /dev/block/mapper/system       flags=slotselect;display="System image";flashimg=1;backup=1
+/vendor_image           emmc    /dev/block/mapper/vendor       flags=slotselect;display="Vendor image";flashimg=1;backup=1
+/product_image          emmc    /dev/block/mapper/product      flags=slotselect;display="Product image";flashimg=1;backup=1
+/system_ext_image       emmc    /dev/block/mapper/system_ext   flags=slotselect;display="System ext image";backup=1;flashimg=1
+/my_region_image        emmc    /dev/block/mapper/my_region    flags=slotselect;display="My region image";flashimg=1
 
-/metadata      ext4    /dev/block/bootdevice/by-name/metadata                    flags=display="Metadata"
-/data          ext4    /dev/block/bootdevice/by-name/userdata                    flags=backup=0;fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption
-/storage       f2fs		/data/media/0					flags=display="Internal Storage";usermrf;backup=1;fsflags="bind";removable
-/boot          emmc    /dev/block/bootdevice/by-name/boot                        flags=backup=1;flashimg=1;slotselect
-/vendor_boot   emmc    /dev/block/bootdevice/by-name/vendor_boot                 flags=backup=1;display="Vendor Boot";flashimg=1;slotselect
-/dtbo          emmc    /dev/block/bootdevice/by-name/dtbo                        flags=backup=1;display="DTBO";flashimg=1;slotselect
-/firmware      vfat    /dev/block/bootdevice/by-name/modem                       flags=display="Firmware";slotselect;mounttodecrypt;fsflags=ro
-/persist       ext4    /dev/block/bootdevice/by-name/persist                     flags=display="Persist"
-/persist_image emmc    /dev/block/bootdevice/by-name/persist                     flags=display="Persist";backup=1;flashimg=1
-/cust          ext4    /dev/block/bootdevice/by-name/cust                        flags=display="Cust"
-/misc          emmc    /dev/block/bootdevice/by-name/misc                        flags=display="Misc"
-/modem         emmc    /dev/block/bootdevice/by-name/modem                       flags=backup=1;display="Modem";slotselect
-/bluetooth     emmc    /dev/block/bootdevice/by-name/bluetooth                   flags=backup=1;subpartitionof=/modem;slotselect
-/dsp           emmc    /dev/block/bootdevice/by-name/dsp                         flags=backup=1;subpartitionof=/modem;slotselect
-/efs1          emmc    /dev/block/bootdevice/by-name/modemst1                    flags=backup=1;display=EFS
-/efs2          emmc    /dev/block/bootdevice/by-name/modemst2                    flags=backup=1;subpartitionof=/efs1
-/efsc          emmc    /dev/block/bootdevice/by-name/fsc                         flags=backup=1;subpartitionof=/efs1
-/efsg          emmc    /dev/block/bootdevice/by-name/fsg                         flags=backup=1;subpartitionof=/efs1
+
+
+# Userdata/Metadata partitions
+/metadata	        ext4	/dev/block/by-name/metadata								flags=display=Metadata
+
+# Boot partitions
+/boot			emmc	/dev/block/bootdevice/by-name/boot							flags=slotselect;display="Boot";backup=1;flashimg=1
+/vendor_boot	        emmc	/dev/block/bootdevice/by-name/vendor_boot						flags=slotselect;display="Vendor Boot";backup=1;flashimg=1
+
+# AVB partitions
+/dtbo			emmc	/dev/block/bootdevice/by-name/dtbo							flags=slotselect;display="DTBO";backup=1;flashimg=1
+/vbmeta			emmc	/dev/block/bootdevice/by-name/vbmeta							flags=slotselect;display="VBMeta";backup=1;flashimg=1
+/vbmeta_system	        emmc	/dev/block/bootdevice/by-name/vbmeta_system						flags=slotselect;display="VBMeta System";backup=1;flashimg=1
+/vbmeta_vendor          emmc    /dev/block/bootdevice/by-name/vbmeta_vendor                                             flags=slotselect;display="Vbmeta-Vendor";backup=1;flashimg=1
+
+# Persistent Firmware & Properties
+/firmware		vfat	/dev/block/bootdevice/by-name/modem									flags=slotselect;display="Firmware";mounttodecrypt;fsflags="ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0"
+/persist		ext4	/dev/block/bootdevice/by-name/persist 							flags=display="Persist";fsflags=ro
+/persist_image	        emmc	/dev/block/bootdevice/by-name/persist 							flags=display="Persist";backup=1;flashimg;backup=1
+
+# Modem partitions
+/modem			emmc	/dev/block/bootdevice/by-name/modem							flags=slotselect;backup=1;display="Modem"
+/bluetooth		emmc	/dev/block/bootdevice/by-name/bluetooth							flags=slotselect;backup=1;subpartitionof=/modem
+/dsp			emmc	/dev/block/bootdevice/by-name/dsp							flags=slotselect;backup=1;subpartitionof=/modem
+
+# EFS partitions
+/efs1			emmc	/dev/block/bootdevice/by-name/modemst1							flags=backup=1;display="EFS"
+/efs2			emmc	/dev/block/bootdevice/by-name/modemst2							flags=backup=1;subpartitionof=/efs1
+/efsc			emmc	/dev/block/bootdevice/by-name/fsc							flags=backup=1;subpartitionof=/efs1
+/efsg			emmc	/dev/block/bootdevice/by-name/fsg							flags=backup=1;subpartitionof=/efs1
 
 # Removable storage
-/usb_otg       auto    /dev/block/sdg1                    /dev/block/sdg         flags=fsflags=utf8;display="USB Storage";storage;wipeingui;removable
-/external_sd   auto    /dev/block/mmcblk0p1               /dev/block/mmcblk0     flags=display="MicroSD";storage;wipeingui;removable
+/usb_otg		vfat	/dev/block/sdg1				/dev/block/sdg		                        flags=fsflags=utf8;display="USB OTG";storage;wipeingui;removable
+/external_sd   auto    /dev/block/mmcblk1p1               /dev/block/mmcblk1     flags=display="MicroSD";storage;wipeingui;removable
+
+
+
+
+
+
+
+
